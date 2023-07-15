@@ -16,8 +16,11 @@ const TasksPage = () => {
   useEffect(() => {
     fetchTasks();
   }, []);
-  const onCategoryFilterChangeHandler = (event) => {
+  const oncategoryFilterChangeHandler = (event) => {
     dispatch(tasksAction.filterByCategory(event.target.value));
+  };
+  const onStatusFilterChangeHandler = (event) => {
+    dispatch(tasksAction.filterByStatus(event.target.value));
   };
   return (
     <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4">
@@ -34,8 +37,9 @@ const TasksPage = () => {
             <select
               className=" dropdown form-control pull-right"
               placeholder="Filter By status"
-              autoComplete="off">
-              <option value="">Filter By status</option>
+              autoComplete="off"
+              onChange={onStatusFilterChangeHandler}>
+              <option value="all">Filter By status</option>
               <option value="In Progress">In Progress</option>
               <option value="Complete">Complete</option>
               <option value="Canceled">Canceled</option>
@@ -47,7 +51,7 @@ const TasksPage = () => {
               className=" dropdown form-control pull-right"
               placeholder="Filter By status"
               autoComplete="off"
-              onChange={onCategoryFilterChangeHandler}>
+              onChange={oncategoryFilterChangeHandler}>
               <option value="all">Filter By category</option>
               <option value="Work">Work</option>
               <option value="Home"> Home</option>

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { tasksAction } from "../redux/slices/tasks-slice";
 import TaskController from "../controller/TaskController";
+import TaskModel from "../models/TaskModel";
 
 const TaskDetailsPage = () => {
   const params = useParams();
@@ -42,8 +43,17 @@ const TaskDetailsPage = () => {
   }, []);
   const updateStatusHandler = async (status) => {
     task.status = status;
-    const updated = await controller.update(task);
+    let updated = await controller.update(task);
     if (updated) {
+      let newTask = new TaskModel();
+      newTask.id = task.id;
+      newTask.name = task.name;
+      newTask.status = task.status;
+      newTask.category = task.category;
+      newTask.startDate = task.startDate;
+      newTask.endDate = task.endDate;
+      newTask.details = task.details;
+      dispatch(tasksAction.updateStatus(newTask));
     }
   };
   return (
@@ -106,7 +116,7 @@ const TaskDetailsPage = () => {
             </div>
             <div className="mb-3">
               <span data-feather="layers" className="main-color"></span>
-              <strong>Category:</strong> {task.category}
+              <strong>category:</strong> {task.category}
             </div>
             <div className="">
               <span data-feather="calendar" className="main-color"></span>

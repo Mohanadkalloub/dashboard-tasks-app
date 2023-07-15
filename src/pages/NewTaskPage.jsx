@@ -77,13 +77,13 @@ const NewTaskPage = () => {
 
           <div className="col-md-12">
             <div className="form-outline mb-4">
-              <label className="form-label">Task Category</label>
+              <label className="form-label">Task category</label>
               <select
                 className=" dropdown form-control pull-right"
                 placeholder="Filter By status"
                 autoComplete="off"
                 ref={categoryRef}>
-                <option value="">Select Category</option>
+                <option value="">Select category</option>
                 <option value="Work">Work</option>
                 <option value="Hom1e">Home</option>
                 <option value="Family">Family</option>

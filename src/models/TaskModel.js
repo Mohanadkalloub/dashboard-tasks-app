@@ -1,9 +1,9 @@
 import axios from "axios";
 
 class TaskModel {
-    constructor(name,categroy,details,startDate,endDate,status="Waiting",id){
+    constructor(name,category,details,startDate,endDate,status,id){
         this.name=name;
-        this.categroy=categroy;
+        this.category=category;
         this.details=details;
         this.startDate=startDate;
         this.endDate=endDate;
@@ -14,7 +14,7 @@ class TaskModel {
         try {
             const response = await axios.post(`https://dashboard-tasks-92683-default-rtdb.firebaseio.com/TaskModel.json`,{
                 name:this.name,
-                categroy:this.categroy,
+                category:this.category,
                 details:this.details,
                 startDate:this.startDate,
                 endDate:this.endDate,
@@ -30,7 +30,7 @@ class TaskModel {
         try {
             const response = await axios.put(`https://dashboard-tasks-92683-default-rtdb.firebaseio.com/TaskModel/${this.id}.json`,{
                 name:this.name,
-                categroy:this.categroy,
+                category:this.category,
                 details:this.details,
                 startDate:this.startDate,
                 endDate:this.endDate,
@@ -58,7 +58,7 @@ class TaskModel {
                 const object = response.data[key];
                 const task = new TaskModel(
                     object.name,
-                    object.categroy,
+                    object.category,
                     object.details,
                     object.startDate,
                     object.endDate,

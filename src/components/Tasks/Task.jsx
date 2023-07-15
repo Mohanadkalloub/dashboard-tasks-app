@@ -32,7 +32,7 @@ const Task = (props) => {
           <img src="img/3.png" className="card-img-top" alt="..." />
           <div className="card-body">
             <h5 className="card-title">
-              {props.task.name} - {props.task.categroy}
+              {props.task.name} - {props.task.category}
             </h5>
             <h6 className="card-subtitle mb-2 text-muted">
               <span data-feather="calendar"></span> {props.task.startDate}

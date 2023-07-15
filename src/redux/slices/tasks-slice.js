@@ -22,12 +22,20 @@ const tasksSlice = createSlice({
         },
         filterByCategory(state , action) {
             if(action.payload != "all") {
-                let result = state.data.filter((element) => element.categroy == action.payload)
+                let result = state.data.filter((element) => element.category == action.payload)
                 state.filteredData = result;
             }else {
                 state.filteredData = state.data;
             }
         }, 
+        filterByStatus(state,action) {
+            if(action.payload != "all"){
+                let result = state.data.filter((element) => element.status == action.payload);
+                state.filteredData = result;
+            }else {
+                state.filteredData = state.data;
+            }
+        },
         search(state , action){
             if(action.payload != "") {
                 let result = state.data.filter((element) => element.name.includes(action.payload));
@@ -35,6 +43,9 @@ const tasksSlice = createSlice({
             }else {
                 state.filteredData = state.data;
             }
+        },
+        updateStatus(state,action){
+            state.task = action.payload;
         }
     }
 });
