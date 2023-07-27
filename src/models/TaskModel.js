@@ -19,7 +19,11 @@ class TaskModel {
                 startDate:this.startDate,
                 endDate:this.endDate,
                 // status: this.status,
-            })
+            },
+            {headers : {
+                Authorization : "",
+            }}
+            );
             this.id=response.data.name;
             return this;
         } catch (error) {
@@ -35,7 +39,11 @@ class TaskModel {
                 startDate:this.startDate,
                 endDate:this.endDate,
                 status:this.status 
-            });
+            },
+            {headers : {
+                Authorization : "",
+            }}
+            );
             return true;
         } catch (error) {
             return false;
@@ -43,7 +51,11 @@ class TaskModel {
     }
     async delete() {
         try {
-            const response = await axios.delete(`https://dashboard-tasks-92683-default-rtdb.firebaseio.com/TaskModel/${this.id}.json`);
+            const response = await axios.delete(`https://dashboard-tasks-92683-default-rtdb.firebaseio.com/TaskModel/${this.id}.json` ,
+            {headers : {
+                Authorization : "",
+            }} 
+            );
             return true
         } catch (error) {
             return false;
@@ -51,7 +63,11 @@ class TaskModel {
     }
     static async read() {
         try {
-            const response = await axios.get(`https://dashboard-tasks-92683-default-rtdb.firebaseio.com/TaskModel.json`
+            const response = await axios.get(`https://dashboard-tasks-92683-default-rtdb.firebaseio.com/TaskModel.json`, {
+                headers : {
+                    Authorization : "",
+                },
+            }
             );
             const tasks = []
             for(const key in response.data){

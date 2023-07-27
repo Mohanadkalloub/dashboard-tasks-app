@@ -1,11 +1,19 @@
 import { Fragment } from "react";
-import { useDispatch } from "react-redux";
-import { NavLink, Outlet } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { tasksAction } from "../../redux/slices/tasks-slice";
+import { authSliceActions } from "../../redux/slices/auth-slice";
 const Dashboard = () => {
-  const dispatch = useDispatch();
+  let dispatch = useDispatch();
+  let navigator = useNavigate();
+  let loggedIn = useSelector((state) => state.auth.loggedIn);
   const onSearchChangeHandler = (event) => {
     dispatch(tasksAction.search(event.target.value));
+  };
+  let signOutHandler = () => {
+    localStorage.setItem("loggedIn", false);
+    navigator("/", { replace: true });
+    dispatch(authSliceActions.signOut());
   };
   return (
     <Fragment>
@@ -32,9 +40,13 @@ const Dashboard = () => {
         />
         <div className="navbar-nav">
           <div className="nav-item text-nowrap">
-            <a className="nav-link px-3 btn-light-main btn" href="#">
+            <button
+              className="nav-link px-3 btn-light-main btn"
+              href="#"
+              type="button"
+              onClick={signOutHandler}>
               Sign out
-            </a>
+            </button>
           </div>
         </div>
       </header>
@@ -71,7 +83,7 @@ const Dashboard = () => {
                 <li className="nav-item">
                   <a className="nav-link" href="#">
                     <span data-feather="users"></span>
-                    other link
+                    {loggedIn ?? "no value !"}
                   </a>
                 </li>
                 {/*
