@@ -1,3 +1,4 @@
+import ProcessResponse from "../models/ProcessResponse";
 import TaskModel from "../models/TaskModel";
 
 class TaskController {
@@ -8,7 +9,22 @@ class TaskController {
      *  - Delete
      */
     async create(TaskModel) {
-        return await TaskModel.save();
+        if (
+            TaskModel.name.value !=""&& 
+            TaskModel.category.value !="" && 
+            TaskModel.details.value != "" && 
+            TaskModel.startDate.value != "" && 
+            TaskModel.endDate.value != "" 
+        ){
+            let response = await TaskModel.save()
+            if(response != null){
+                return new ProcessResponse(true , 'Task created successfully' , response);
+            }else{
+                return new ProcessResponse(false , 'Failed to create new task');
+            }
+        }else {
+            return new ProcessResponse(false , 'Enter required data' )
+        };
     }
     async read() {
         return await TaskModel.read();

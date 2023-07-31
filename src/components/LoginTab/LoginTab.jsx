@@ -1,31 +1,36 @@
 import { useRef } from "react";
 import SocialMedia from "../SocialMedia/SocialMedia";
-import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { authSliceActions } from "../../redux/slices/auth-slice";
+import UserController from "../../controller/user-controller";
+import User from "../../models/user-model";
 
 const LoginTab = () => {
+  let controller = new UserController();
   let emailRef = useRef();
   let passwordRef = useRef();
-  let navigator = useNavigate();
   let dispatch = useDispatch();
-  let onFormSubmitHandler = (event) => {
+  let onFormSubmitHandler = async (event) => {
     event.preventDefault();
-    if (checkData()) {
-      login();
+    let response = await controller.signIn(user());
+    if (response.status) {
+      localStorage.setItem("loggedIn", true);
+      localStorage.setItem("token", response.data.idToken);
+      // for new task take userid
+      localStorage.setItem("userId", response.data.localId);
+      dispatch(
+        authSliceActions.setToken({
+          token: response.data.idToken,
+          userId: response.data.localId,
+        })
+      );
+      //   navigator("/Dashboard", { replace: true });
     }
+    alert(response.message);
+    // login();
   };
-  let checkData = () => {
-    if (emailRef.current.value != "" && passwordRef.current.value != "") {
-      return true;
-    }
-    alert("Enter required data");
-    return false;
-  };
-  let login = () => {
-    localStorage.setItem("LoggedIn", true);
-    navigator("/Dashboard", { replace: true });
-    dispatch(authSliceActions.signIn());
+  let user = () => {
+    return new User(null, emailRef.current.value, passwordRef.current.value);
   };
   return (
     <div
@@ -66,9 +71,9 @@ const LoginTab = () => {
                 type="checkbox"
                 value=""
                 id="loginCheck"
-                checked
+                defaultChecked
               />
-              <label className="form-check-label" for="loginCheck">
+              <label className="form-check-label" htmlFor="loginCheck">
                 Remember me
               </label>
             </div>

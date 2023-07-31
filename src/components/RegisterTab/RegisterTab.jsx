@@ -1,6 +1,42 @@
+import { useRef } from "react";
+import UserController from "../../controller/user-controller";
 import SocialMedia from "../SocialMedia/SocialMedia";
+import User from "../../models/user-model";
+import { useDispatch } from "react-redux";
+import { authSliceActions } from "../../redux/slices/auth-slice";
 
 const RegisterTab = () => {
+  let controller = new UserController();
+  let nameRef = useRef();
+  let emailRef = useRef();
+  let passwordRef = useRef();
+  let passwordConfirmationRef = useRef();
+  let dispatch = useDispatch();
+  let onFormSubmitHandler = async (event) => {
+    event.preventDefault();
+    let response = await controller.register(user());
+    if (response.status) {
+      localStorage.setItem("loggedIn", true);
+      localStorage.setItem("token", response.data.idToken);
+      localStorage.setItem("userId", response.data.localId);
+      dispatch(authSliceActions.setToken(response.data.id));
+      dispatch(
+        authSliceActions.setToken({
+          token: response.data.idToken,
+          userId: response.data.localId,
+        })
+      );
+    }
+    alert(response.message);
+  };
+  let user = () => {
+    return new User(
+      nameRef.current.value,
+      emailRef.current.value,
+      passwordRef.current.value,
+      passwordConfirmationRef.current.value
+    );
+  };
   return (
     <div
       className="tab-pane fade"
@@ -8,7 +44,7 @@ const RegisterTab = () => {
       role="tabpanel"
       aria-labelledby="tab-register">
       {/* rigestar tab */}
-      <form>
+      <form onSubmit={onFormSubmitHandler}>
         <SocialMedia message="Register To Task System with " />
 
         <h4 className="mb-4 mt-5 text-center">or:</h4>
@@ -19,15 +55,7 @@ const RegisterTab = () => {
             id="registerName"
             className="form-control"
             placeholder="Name"
-          />
-        </div>
-
-        <div className="form-outline mb-4">
-          <input
-            type="text"
-            id="registerUsername"
-            className="form-control"
-            placeholder="Username"
+            ref={nameRef}
           />
         </div>
 
@@ -37,6 +65,7 @@ const RegisterTab = () => {
             id="registerEmail"
             className="form-control"
             placeholder="Email"
+            ref={emailRef}
           />
         </div>
 
@@ -46,6 +75,7 @@ const RegisterTab = () => {
             id="registerPassword"
             className="form-control"
             placeholder="password"
+            ref={passwordRef}
           />
         </div>
 
@@ -55,6 +85,7 @@ const RegisterTab = () => {
             id="registerRepeatPassword"
             className="form-control"
             placeholder="repeat password"
+            ref={passwordConfirmationRef}
           />
         </div>
         <div className="form-check d-flex justify-content-center mb-4">
@@ -63,10 +94,10 @@ const RegisterTab = () => {
             type="checkbox"
             value=""
             id="registerCheck"
-            checked
+            defaultChecked
             aria-describedby="registerCheckHelpText"
           />
-          <label className="form-check-label" for="registerCheck">
+          <label className="form-check-label" htmlFor="registerCheck">
             I have read and agree to the terms
           </label>
         </div>

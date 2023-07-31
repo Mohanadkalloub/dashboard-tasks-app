@@ -2,14 +2,21 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const authSlice = createSlice({
     name : 'auto-slice',
-    initialState : {loggedIn : JSON.parse(localStorage.getItem('loggedIn'))},
+    initialState :
+    {
+    loggedIn : JSON.parse(localStorage.getItem('loggedIn')) ,
+    token : localStorage.getItem('token'),
+    userId :localStorage.getItem('userId'),
+    },
     reducers : {
-        signIn(state,action) {
-            state.loggedIn = true;
-        },
         signOut(state,action){
-            state.loggedIn = false;
+            state.loggedIn = false; 
         },
+        setToken(state,action) {
+            state.loggedIn = true;
+            state.token = action.payload.token;
+            state.userId = action.payload.userId;
+        }
     }
 });
 

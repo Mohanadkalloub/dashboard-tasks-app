@@ -20,7 +20,7 @@ const Task = (props) => {
   //   navigateor(`/Dashboard/tasks/details`);
   // };
   const deleteTaskHandler = async () => {
-    const deleted = await taskController.delete(props.task);
+    let deleted = await taskController.delete(props.task);
     if (deleted) {
       dispatch(tasksAction.delete(props.task.id));
     }

@@ -1,53 +1,41 @@
 import { Fragment, useRef } from "react";
 import TaskModel from "../models/TaskModel";
 import TaskController from "../controller/TaskController";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { tasksAction } from "../redux/slices/tasks-slice";
 
 const NewTaskPage = () => {
-  const nameRef = useRef();
-  const categoryRef = useRef();
-  const detailsRef = useRef();
-  const startDateRef = useRef();
-  const endDateRef = useRef();
-  const controller = new TaskController();
-  const dispatch = useDispatch();
-  const onSubmitHandler = async (event) => {
+  let nameRef = useRef();
+  let categoryRef = useRef();
+  let detailsRef = useRef();
+  let startDateRef = useRef();
+  let endDateRef = useRef();
+
+  let controller = new TaskController();
+  let dispatch = useDispatch();
+  let userId = useSelector((state) => state.auth.userId);
+
+  let onSubmitHandler = async (event) => {
     event.preventDefault();
-    if (checkData()) {
-      await createTask();
-    }
+    await createTask();
   };
-  const checkData = () => {
-    if (
-      nameRef.current.value != "" &&
-      categoryRef.current.value != "" &&
-      detailsRef.current.value != "" &&
-      startDateRef.current.value != "" &&
-      endDateRef.current.value != ""
-    ) {
-      return true;
-    }
-    alert("Enter requier data !");
-    return false;
-  };
-  const createTask = async () => {
-    const task = new TaskModel(
+  let createTask = async () => {
+    let task = new TaskModel(
       nameRef.current.value,
       categoryRef.current.value,
       detailsRef.current.value,
       startDateRef.current.value,
-      endDateRef.current.value
+      endDateRef.current.value,
+      userId
     );
-    const newTask = await controller.create(task);
-    if (newTask != null) {
-      dispatch(tasksAction.create(newTask));
+    const response = await controller.create(task);
+    if (response.status) {
+      dispatch(tasksAction.create(response.data));
       clearTask();
-    } else {
-      alert("Failed to create new task ! ");
     }
+    alert(response.message);
   };
-  const clearTask = () => {
+  let clearTask = () => {
     nameRef.current.value = "";
     categoryRef.current.value = "";
     detailsRef.current.value = "";
